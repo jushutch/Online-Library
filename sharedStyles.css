@@ -1,0 +1,30 @@
+body {
+    background-color: #92dbe0;
+}
+
+.logo {
+    width: 120px;
+    padding: 20px;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
+    background-color: #28739E;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+a:hover {
+    color: white;
+}
+
+.message {
+    margin-top: 0;
+    font-size: 12px;
+}
