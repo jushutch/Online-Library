@@ -1,0 +1,55 @@
+body {
+    background-color: #92dbe0;
+}
+
+#createUserForm {
+    box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    border: 6px solid #305A72;
+    margin: auto;
+    width: fit-content;
+    max-width: 500px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+#createUserForm ul li input{
+    box-sizing: border-box; 
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+	padding: 8px;
+	outline: none;
+	border: 1px solid #B0CFE0;
+}
+
+#createUserForm ul li input:focus {
+    box-shadow: 0 0 5px #305A72;
+    //border: 5px solid black;
+}
+
+#createUserForm ul li {
+    text-align:center;
+    padding:10px;
+}
+
+#createUserForm ul li input[type="submit"] {
+    -moz-box-shadow: inset 0px 1px 0px 0px #3985B1;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #3985B1;
+    box-shadow: inset 0px 1px 0px 0px #3985B1;
+    background-color: #216288;
+    border: 1px solid #17445E;
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+    padding: 8px 18px;
+    text-decoration: none;
+    font: 12px Arial, Helvetica, sans-serif;
+}
+
+.formList {
+    list-style:none;
+    margin:0;
+    padding:20px;
+}

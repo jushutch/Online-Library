@@ -1,16 +1,25 @@
 <?php
     session_start();
-    $random = rand();
-    $_SESSION['random'] = $random;
-    if(isset($_POST['createNewUser']) && $_POST['randomCheck']==$_SESSION['random']) {
+    require_once "User.php";
+    $newUser = new User();
+
+    if(isset($_POST['createNewUser'])) {
         $password = $_POST['password'];
         $passwordConfirm = $_POST['passwordConfirm'];
         if ($password !== $passwordConfirm) {
             $passwordMessage = "Passwords do not match, please try again";
+        } else if ($newUser->isEmailTaken($_POST['email'])) {
+            $passwordMessage = "Email is already taken, please use another";
+        }
+        else {
+            $newAccountId = $newUser->createNewAccount();
+            $passwordMessage = "Your id number is: $newAccountId";
+            //header("Location: index.php");
         }
     } else {
         $passwordMessage = "Password must be at least 6 characters";
     }
+
 ?>
 <html>
     <head>
@@ -18,8 +27,7 @@
         <link rel="stylesheet" href="formStyle.css">
     </head>
     <body>
-        <form method="post" action="createUser.php" id="createUserForm">
-            <input type="hidden" value="<?php echo $random; ?>" name="randomCheck" />
+        <form method="post" action="createAccount.php" id="createUserForm">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>

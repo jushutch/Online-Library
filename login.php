@@ -1,30 +1,20 @@
 <?php
     session_start();
+    include_once "User.php";
     $errorMessage = "";
-    if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
-        header("Location:index.php");
-    }
 
     if(isset($_POST['login'])) {
-        $errorMessage = validateLogin();
-        //setSessionVariables();
-    }
-
-    function validateLogin() {
-        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $accountNumber = $_POST['accountNumber'];
-        if (!isValidLoginCredentials($accountNumber, $hashedPassword)) {
-            $_SESSION['loggedIn'] = false;
-            return "Either your account number or password are incorrect";
+        $user = new User();
+        if ($user->isValidLogin($_POST['accountNumber'], $_POST['password'])) {
+            $_SESSION['loggedIn'] = true;
         }
-        $_SESSION['accountNumber'] = $accountNumber;
-        $_SESSION['loggedIn'] = true;
-        return "";
+        else {
+            $errorMessage = "Either the account number or password is incorrect";
+        };
     }
 
-    function isValidLoginCredentials($accountNumber, $hashedPassword) {
-        return $accountNumber == 1 
-            && password_verify("password", $hashedPassword);
+    if($_SESSION['loggedIn']) {
+        header("Location:index.php");
     }
 
 ?>
@@ -49,7 +39,7 @@
                 </li>
                 <a href="index.php">Home</a>
                 <br>
-                <a href="createUser.php">Create Account</a>
+                <a href="createAccount.php">Create Account</a>
             </ul>
         </form>
     </body>
