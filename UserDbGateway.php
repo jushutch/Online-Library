@@ -1,79 +1,58 @@
 <?php
 
+require_once "Gateway.php";
 
-class UserDbGateway {
+class UserDbGateway extends Gateway {
 
-    private $hostname;
-    private $database;
-    private $username;
-    private $password;
-
-    public function __construct() {
-        $this->hostname = "localhost";
-        $this->database = "library";
-        $this->username = "root";
-        $this->password = "mysql";
-    }
-
-    public function insertNewUser($firstName, $lastName, $email, $password) {
-        $conn = new mysqli($this->hostname, $this->username, $this->password, $this->database);
-        if ($conn->connect_error) die("Fatal error");
-        $this->sanitizeArrayOfInputs($conn, func_get_args());
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    public function insertNewUser($user) {
+        $hashedPassword = password_hash($user->password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO user(first_name, last_name, email, password)
-                VALUES ('$firstName', '$lastName', '$email', '$hashedPassword')";
-        $result = $conn->query($sql);
-        $accountId = $conn->insert_id;
-        $conn->close();
-        return $accountId;
+                VALUES ( ? , ? , ? , ? )";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $user->firstName, $user->lastName, $user->email, $hashedPassword);
+        $stmt->execute();
+        $stmt->close();
+        return $this->conn->insert_id;
     }
 
-    public function selectEmail($email) {
-        $conn = new mysqli($this->hostname, $this->username, $this->password, $this->database);
-        $this->fixMySQLStringEntities($conn, $email);
-        $sql = "SELECT account_number FROM user WHERE email = '$email'";
-        $rows = $conn->query($sql);
-        $conn->close();
-        return $rows;
+    public function selectAccountFromEmail($email) {
+        $sql = "SELECT account_number FROM user WHERE email = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row["account_number"];
     }
 
     public function getAccountInfo($accountNumber) {
-        $conn = new mysqli($this->hostname, $this->username, $this->password, $this->database);
-        $this->fixMySQLStringEntities($conn, $accountNumber);
-        $sql = "SELECT account_number, password FROM user WHERE account_number = $accountNumber";
-        $rows = $conn->query($sql);
-        $conn->close();
-        return $rows;
+        $sql = "SELECT account_number, password FROM user WHERE account_number = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $accountNumber);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $stmt->close();
+        return $row;
     }
 
     public function getPasswordForAccount($accountNumber) {
-        $conn = new mysqli($this->hostname, $this->username, $this->password, $this->database);
-        $this->fixMySQLStringEntities($conn, $accountNumber);
-        $sql = "SELECT password FROM user WHERE account_number = $accountNumber";
-        $result= $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return isset($row['password']) ? $row['password'] : null;
+        $sql = "SELECT password FROM user WHERE account_number = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $accountNumber);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row["password"];
     }
 
-    private function sanitizeArrayOfInputs($conn, $strings) {
-        $returnStrings = [];
-        foreach ($strings as $string) {
-            if ($string) $returnStrings[] = $this->fixMySQLStringEntities($conn, $string);
-        }
-        return $returnStrings;
+    public function selectAdminNumberFromAccount($accountNumber) {
+        $sql = "SELECT admin_number FROM admin WHERE account_number = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $accountNumber);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row["admin_number"];
     }
 
-    private function fixMySQLStringEntities(&$conn, &$string) {
-        return htmlentities($this->fixMySQLString($conn, $string));
-    }
-
-    private function fixMySQLString(&$conn, &$string) {
-        if (get_magic_quotes_gpc()) $string = stripslashes($string);
-        return $conn->real_escape_string($string);
-    }
-
-    private function printMySQLError() {
-        echo "Something went wrong, please try again later.";
-    }
 }

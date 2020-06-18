@@ -3,27 +3,28 @@ require_once "UserDbGateway.php";
 
 class User {
 
-    private $firstName;
-    private $lastName;
-    private $email;
-    private $password;
+    public $firstName;
+    public $lastName;
+    public $email;
+    public $password;
+
     private $userDbGateway;
 
     public function __construct() {
         $this->userDbGateway = new UserDbGateway();
     }
 
-    public function createNewAccount() {
+    public function createUser() {
         $this->firstName = $_POST['firstName'];
-        $this->lastName = $_POST['lastName'];
+        $this->lastName = $_POST['lastName'] ? $_POST['lastName'] : null;
         $this->email = $_POST['email'];
         $this->password = $_POST['password'];
-        return $this->userDbGateway->insertNewUser($this->firstName, $this->lastName, $this->email, $this->password);
+        $_POST = array();
+        return $this->userDbGateway->insertNewUser($this);
     }
 
     public function isEmailTaken($email) {
-        $rows = $this->userDbGateway->selectEmail($email);
-        return $rows->num_rows > 0;
+        return $this->userDbGateway->selectAccountFromEmail($email);
     }
 
     public function isValidLogin($accountNumber, $password) {
@@ -33,9 +34,13 @@ class User {
         return password_verify($password, $accountPassword);
     }
 
+    public function isAdmin($accountNumber) {
+        return $this->userDbGateway->selectAdminNumberFromAccount($accountNumber) ? true : false;
+    }
+
     private function doesAccountNumberExist($accountNumber) {
         if (!isset($accountNumber)) return false;
-        return $this->userDbGateway->getAccountInfo($accountNumber)->num_rows > 0;
+        return $this->userDbGateway->getAccountInfo($accountNumber);
     }
 
 }
