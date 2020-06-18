@@ -12,7 +12,7 @@
             $passwordMessage = "Email is already taken, please use another";
         }
         else {
-            $newAccountId = $newUser->createNewAccount();
+            $newAccountId = $newUser->createUser();
             $passwordMessage = "Your id number is: $newAccountId";
             //header("Location: index.php");
         }
@@ -23,11 +23,13 @@
 ?>
 <html>
     <head>
+        <title>Sign Up</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="sharedStyles.css">
         <link rel="stylesheet" href="formStyle.css">
     </head>
     <body>
-        <form method="post" action="createAccount.php" id="createUserForm">
+        <form method="post" action="signup.php" id="createUserForm">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>
@@ -52,9 +54,3 @@
         </form>
     </body>
 </html>
-<?php
-    if(isset($_POST['createNewUser'])) {
-        //echo "<h1>".$_POST['firstName']."</h1>";
-        //createNewUser();
-    }
-?>

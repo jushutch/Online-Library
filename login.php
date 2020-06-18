@@ -7,6 +7,7 @@
         $user = new User();
         if ($user->isValidLogin($_POST['accountNumber'], $_POST['password'])) {
             $_SESSION['loggedIn'] = true;
+            $_SESSION['admin'] = $user->isAdmin($_POST['accountNumber']);
         }
         else {
             $errorMessage = "Either the account number or password is incorrect";
@@ -20,6 +21,8 @@
 ?>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
         <link rel="stylesheet" href="sharedStyles.css">
         <link rel="stylesheet" href="formStyle.css">
     </head>
@@ -39,7 +42,7 @@
                 </li>
                 <a href="index.php">Home</a>
                 <br>
-                <a href="createAccount.php">Create Account</a>
+                <a href="signup.php">Sign up</a>
             </ul>
         </form>
     </body>

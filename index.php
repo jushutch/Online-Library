@@ -1,16 +1,23 @@
 <?php
     session_start();
-    if (isset($_SESSION['loggedIn'])) {
+    if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && $_SESSION['admin']) {
+        $navigationLinks = "<a href='logout.php'>Logout</a>
+                            <br>
+                            <a href='manageLibrary.php'>Manage Library</a>";
+    }
+    else if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
         $navigationLinks = "<a href=\"logout.php\">Logout</a>";
-    } else {
+    }
+    else {
         $navigationLinks = "<a href='login.php'>Login</a>
                             <br>
-                            <a href='createAccount.php'>Create Account</a>";
+                            <a href='signup.php'>Sign up</a>";
     }
 
 ?>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="sharedStyles.css">
         <link rel="stylesheet" href="indexStyle.css">
         <title>Library of Time</title>
