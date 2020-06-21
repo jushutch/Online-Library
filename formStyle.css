@@ -8,13 +8,14 @@ form {
     border: 6px solid #305A72;
     margin: auto;
     width: fit-content;
+    max-width: 600px;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
     text-align: center;
 }
 
-form ul li input, form ul li select{
+input, select{
     box-sizing: border-box; 
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box; 
@@ -23,17 +24,33 @@ form ul li input, form ul li select{
 	border: 1px solid #B0CFE0;
 }
 
-form ul li input:focus, form ul li select:focus {
-    box-shadow: 0 0 5px #305A72;
-    //border: 5px solid black;
+.formList div label {
+    display: block;
+    padding-left:3px;
 }
 
-form ul li {
+.formList div {
+    margin-bottom: 10px;
+    display:inline-block;
+    text-align:left;
+}
+
+.formList li {
     text-align:center;
     padding:10px;
 }
 
-form ul li input[type="submit"] {
+input:focus, select:focus {
+    box-shadow: 0 0 5px #305A72;
+    //border: 5px solid black;
+}
+
+.inputField {
+    //text-align:center;
+    padding:10px;
+}
+
+input[type="submit"] {
     -moz-box-shadow: inset 0px 1px 0px 0px #3985B1;
     -webkit-box-shadow: inset 0px 1px 0px 0px #3985B1;
     box-shadow: inset 0px 1px 0px 0px #3985B1;
@@ -50,14 +67,14 @@ form ul li input[type="submit"] {
     font: 12px Arial, Helvetica, sans-serif;
 }
 
-form ul li input[type="number"] {
+input[type="number"] {
     width: 70px;
 }
 
 .formList {
     list-style:none;
     margin:0;
-    padding:20px;
+    padding: 0px 20px 20px;
 }
 
 select:invalid {
