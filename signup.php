@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once "User.php";
+    require_once "Objects/User.php";
     $newUser = new User();
 
     if(isset($_POST['createNewUser'])) {
@@ -25,8 +25,8 @@
     <head>
         <title>Sign Up</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="sharedStyles.css">
-        <link rel="stylesheet" href="formStyle.css">
+        <link rel="stylesheet" href="CSS/sharedStyles.css">
+        <link rel="stylesheet" href="CSS/formStyle.css">
     </head>
     <body>
         <form method="post" action="signup.php" id="createUserForm">

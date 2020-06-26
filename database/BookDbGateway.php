@@ -1,6 +1,6 @@
 <?php
 
-require_once "Gateway.php";
+require_once "database/Gateway.php";
 
 class BookDbGateway extends Gateway {
 

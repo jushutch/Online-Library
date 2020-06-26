@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once "User.php";
+    include_once "Objects/User.php";
     $errorMessage = "";
 
     if(isset($_POST['login'])) {
@@ -23,8 +23,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Login</title>
-        <link rel="stylesheet" href="sharedStyles.css">
-        <link rel="stylesheet" href="formStyle.css">
+        <link rel="stylesheet" href="CSS/sharedStyles.css">
+        <link rel="stylesheet" href="CSS/formStyle.css">
     </head>
     <body>
         <form method="post" action="login.php" id="createUserForm">

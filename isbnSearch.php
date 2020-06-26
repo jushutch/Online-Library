@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once "Book.php";
+    require_once "Objects/Book.php";
 
     if (!$_SESSION['admin'] || !$_SESSION['loggedIn']) {
         header("Location:login.php");
@@ -14,8 +14,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
         <script src="isbnSearchComponent.js"></script>
-        <link rel="stylesheet" href="sharedStyles.css">
-        <link rel="stylesheet" href="formStyle.css">
+        <link rel="stylesheet" href="CSS/formStyle.css">
+        <link rel="stylesheet" href="CSS/sharedStyles.css">
     </head>
     <body ng-controller="MainController">
         <form autocomplete="off" ng-submit="search(isbn)" ng-if="!hasSearchResult">
@@ -31,9 +31,13 @@
         <form method="post" action="isbnSearch.php" autocomplete="off" ng-if="hasSearchResult">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <div class="formList">
-                <div>
+                <div style="width:45%;">
                     <label for="title">Title</label>
-                    <input type="text" ng-value="title"  name="title" size="20" autofocus required>
+                    <input type="text" ng-value="title"  name="title" style="width:100%;" autofocus required>
+                </div>
+                <div style="width:45%;">
+                    <label for="subtitle">Subtitle</label>
+                    <input type="text" ng-value="subtitle"  name="subtitle" style="width:100%;">
                 </div>
                 <div>
                     <label for="series">Series</label>
@@ -43,21 +47,24 @@
                     <label for="seriesNumber">No.</label>
                     <input type="number" ng-value="seriesNumber" name="seriesNumber" size="2">
                 </div>
-                <div>
-                    <label for="pageCount">Pages</label>
-                    <input type="text" ng-value="pageCount" name="pageCount" size="3">
-                </div>
-                <div>
+                <div style="width:45%">
                     <label for="authors">Authors</label>
-                    <input type="text" ng-value="authors" name="authors" size="20" required>
+                    <input type="text" ng-value="authors" name="authors" style="width:100%" required>
+                </div>
+                <div style="width:45%">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" ng-value="publisher" name="publisher" style="width:100%" required>
                 </div>
                 <div>
                     <label for="year">Year</label>
-                    <input type="text" ng-value="publishDate" name="year" size="4" required>
+                    <input type="text" ng-value="publishDate" name="year" maxlength="4" size="3" required>
                 </div>
                 <div>
-                    <label for="isbn">ISBN</label>
-                    <input type="text" ng-value="isbn" name="isbn" size="13" required>
+                    <label for="pageCount">Pages</label>
+                    <input type="text" ng-value="pageCount" name="pageCount" size="2">
+                </div>
+                <div style="display:none">
+                    <input type="hidden" ng-value="isbn" name="isbn" size="13" required>
                 </div>
                 <div>
                     <label for="genre">Genre</label>

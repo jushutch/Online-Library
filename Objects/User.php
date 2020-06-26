@@ -1,5 +1,5 @@
 <?php
-require_once "UserDbGateway.php";
+require_once "database/UserDbGateway.php";
 
 class User {
 

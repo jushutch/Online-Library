@@ -1,6 +1,6 @@
 <?php
 
-require_once "BookDbGateway.php";
+require_once "database/BookDbGateway.php";
 
 class Book {
     public $title;
