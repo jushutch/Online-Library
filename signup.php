@@ -6,9 +6,10 @@
     if(isset($_POST['createNewUser'])) {
         $password = $_POST['password'];
         $passwordConfirm = $_POST['passwordConfirm'];
+        $email = strtolower($_POST['email']);
         if ($password !== $passwordConfirm) {
             $passwordMessage = "Passwords do not match, please try again";
-        } else if ($newUser->isEmailTaken($_POST['email'])) {
+        } else if ($newUser->isEmailTaken($email)) {
             $passwordMessage = "Email is already taken, please use another";
         }
         else {

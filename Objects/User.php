@@ -16,8 +16,8 @@ class User {
 
     public function createUser() {
         $this->firstName = $_POST['firstName'];
-        $this->lastName = $_POST['lastName'] ? $_POST['lastName'] : null;
-        $this->email = $_POST['email'];
+        $this->lastName = isset($_POST['lastName']) && $_POST['lastName'] ? $_POST['lastName'] : null;
+        $this->email = strtolower($_POST['email']);
         $this->password = $_POST['password'];
         $_POST = array();
         return $this->userDbGateway->insertNewUser($this);
