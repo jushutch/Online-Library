@@ -1,0 +1,38 @@
+.search_result {
+    padding-bottom:20px;
+}
+
+.result_wrapper {
+    padding-bottom:20px;
+    max-width:900px;
+    margin: auto;
+    //box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    border: 6px solid #305A72;
+    width: fit-content;
+}
+
+.thumbnail {
+    vertical-align:top;
+    padding:20px;
+}
+
+.thumbnail img {
+    width: 150px;
+}
+
+.book_details {
+    display:inline-block;
+    max-width:600px;
+    margin: 0;
+    padding: 20px;
+}
+
+.book_details ul {
+    list-style:none;
+}
+
+.book_details li {
+    //padding:5px;
+    margin: 0;
+}

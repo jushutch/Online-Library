@@ -1,0 +1,13 @@
+<div class="result_wrapper">
+    <div class="thumbnail" style="display:inline-block">
+        <img  ng-src="{{$ctrl.book.imageURL}}">
+    </div>
+    <div class="book_details">
+        <ul class="book_details">
+            <li><h3>{{$ctrl.book.title}}</h3></li>
+            <li><h4>{{$ctrl.book.subtitle}}</h4></li>
+            <li>{{$ctrl.book.authors.join(", ")}}</li>
+            <li>{{$ctrl.book.description}}</li>
+        </ul>
+    </div>
+</div>
