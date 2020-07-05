@@ -3,11 +3,19 @@
         <img  ng-src="{{$ctrl.book.imageURL}}">
     </div>
     <div class="book_details">
-        <ul class="book_details">
-            <li><h3>{{$ctrl.book.title}}</h3></li>
-            <li><h4>{{$ctrl.book.subtitle}}</h4></li>
-            <li>{{$ctrl.book.authors.join(", ")}}</li>
-            <li>{{$ctrl.book.description}}</li>
-        </ul>
+        <p class="title">{{$ctrl.book.title}}<span ng-if="$ctrl.book.subtitle">, {{$ctrl.book.subtitle}}</span></p>
+        <p class="series" ng-if="$ctrl.book.series">Volume {{$ctrl.book.seriesNumber}} of {{$ctrl.book.series}}</p>
+        <p class="authors">By {{$ctrl.book.authors.join(", ")}}</p>
+        <p class="description"><span style="padding-left:2em;"></span>{{$ctrl.book.description}}</p>
+        <div class="specs">
+            <p>Genre: {{$ctrl.book.genre}}</p>
+            <p>Pages: {{$ctrl.book.pageCount}}</p>
+            <p>Publisher: {{$ctrl.book.publisher}}</p>
+            <p>Year: {{$ctrl.book.year}}</p>
+        </div>
+        <span style="float:right;">
+            <button ng-disabled="checkoutDisabled" ng-click="checkOut()" ng-if="$ctrl.book.isAvailable">{{buttonText}}</button>
+            <button ng-if="!$ctrl.book.isAvailable">Put on Hold</button>
+        </span>
     </div>
 </div>

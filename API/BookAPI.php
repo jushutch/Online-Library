@@ -1,5 +1,5 @@
 <?php
-    require_once "..\API\BookSearchService.php";
+    require_once __DIR__ . "/BookSearchService.php";
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata, true);
     $searchString = $request['searchText'];

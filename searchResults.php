@@ -1,4 +1,4 @@
-<html ng-app="bookModule" lang="en">
+<html ng-app="bookSearchModule" lang="en">
 <head>
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
@@ -11,26 +11,28 @@
 <!--    <script src="searchResultsComponent.js"></script>-->
     <title>Library of Time</title>
 </head>
-<body  ng-controller="MainController">
-    <div style="width:50%;margin:auto;padding:20px;">
-        <form ng-submit="search(searchTerms)" class="search">
-            <input type="text" ng-model="searchTerms" placeholder="Search Library" name="searchTerms" class="searchTerm" autocomplete="off" autofocus>
-            <input type="submit" name="searchLibrary" value="Search" class="searchButton">
-        </form>
-    </div>
-<!--    <div ng-repeat="book in searchResults">-->
-<!--        <search-result book={{book}}></search-result>-->
-<!--    </div>-->
-    <div class="search_result" ng-repeat="book in searchResults">
-        <search-result book="book"></search-result>
-    </div>
-<!--    <select name="searchField" required>-->
-<!--        <option value="all" selected>All Fields</option>-->
-<!--        <option value="title">Title</option>-->
-<!--        <option value="author">Author</option>-->
-<!--        <option value="publisher">Publisher</option>-->
-<!--        <option value="series">Series</option>-->
-<!--        <option value="description">Description</option>-->
-<!--    </select>-->
-</body>
+    <body  ng-controller="SearchController">
+        <div ng-if="!hasSearchResults">
+            <div id="searchBarWrapper">
+                <div style="text-align:center;">
+                    <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
+                </div>
+                <form ng-submit="search(searchTerms)" class="search">
+                    <input type="text"  ng-model="searchTerms" placeholder="Search Library" name="searchTerms" class="searchTerm" autocomplete="off" autofocus>
+                    <input type="submit" value="Search" name="searchLibrary" class="searchButton">
+                </form>
+            </div>
+        </div>
+        <div ng-if="hasSearchResults">
+            <div  style="width:50%;margin:auto;padding:20px;">
+                <form ng-submit="search(searchTerms)" class="search">
+                    <input type="text" ng-model="searchTerms" ng-value="carrySearchTerms" placeholder="Search Library" name="searchTerms" class="searchTerm" autocomplete="off" autofocus>
+                    <input type="submit" name="searchLibrary" value="Search" class="searchButton">
+                </form>
+            </div>
+            <div class="search_result" ng-repeat="book in searchResults">
+                <search-result book="book"></search-result>
+            </div>
+        </div>
+    </body>
 </html>

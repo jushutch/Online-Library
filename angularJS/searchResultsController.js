@@ -1,25 +1,53 @@
 (function () {
-    var app = angular.module("bookModule", []);
+    var app = angular.module("bookSearchModule", []);
 
-    var MainController = function($scope, $http) {
+    var BookDetailController = function($scope, $http) {
+        var vm = this;
+        vm.$onInit = function() {
+            if (vm.book.isAvailable) {
+                $scope.buttonText = "Check Out";
+            } else {
+                $scope.buttonText = "Unavailable";
+                $scope.checkoutDisabled = true;
+            }
+        }
 
+        $scope.checkOut = function() {
+            if (!userId) {
+                window.location.href = "login.php";
+            } else {
+                $http.post("/API/CheckoutAPI.php",
+                    {isbn : vm.book.isbn,
+                        userId : userId})
+                    .then(function(response){
+                        $scope.buttonText = "Success!";
+                        $scope.checkoutDisabled = true;
+                    });
+            }
+        }
+    };
+
+    var SearchController = function($scope, $http) {
         $scope.searchResults = [];
-        $scope.hasSearchResult = false;
+        $scope.hasSearchResults = false;
+        $scope.carrySearchTerms = "";
 
         $scope.search = function(searchText) {
             $http.post("/API/BookApi.php", {searchText: searchText}).then(function(book){
                 $scope.searchResults = book["data"];
-                $scope.hasSearchResult = true;
+                $scope.carrySearchTerms = searchText;
+                $scope.hasSearchResults = true;
                 console.log($scope.searchResults);
             });
         };
 
     };
-    app.controller("MainController", ["$scope", "$http", MainController]);
+    app.controller("SearchController", ["$scope", "$http", SearchController]);
     app.component('searchResult', {
-        templateUrl: 'angularJs/searchResultTemplate.html',
+        templateUrl: 'angularJS/searchResultTemplate.html',
+        controller: BookDetailController,
         bindings: {
-            book: '='
+            book: '<'
         }
     });
 }());
