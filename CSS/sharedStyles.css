@@ -2,20 +2,26 @@ body {
     background-color: #92dbe0;
 }
 
+.topMenu {
+    text-align:right;
+    color:black;
+    padding:10px;
+}
+
 .logo {
     width: 120px;
     padding: 20px;
 }
 
-input[type="submit"]:hover {
+button:hover, input[type="submit"]:hover {
     background: linear-gradient(to bottom, #2D77A2 5%, #337DA8 100%);
     background-color: #28739E;
 }
 
 a {
     text-decoration: none;
-    color: black;
-    font-size: 12px;
+    color: inherit;
+    font-size: 14px;
     margin: 0;
     padding: 0;
 }
@@ -27,6 +33,36 @@ a:hover {
 .message {
     margin-top: 0;
     font-size: 12px;
+}
+
+button {
+    -moz-box-shadow: inset 0px 1px 0px 0px #3985B1;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #3985B1;
+    box-shadow: inset 0px 1px 0px 0px #3985B1;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #216288;
+    border: 1px solid #17445E;
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+    padding: 8px 18px;
+    text-decoration: none;
+    font: 12px Arial, Helvetica, sans-serif;
+}
+
+.border {
+    box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    border: 6px solid #305A72;
+    margin: auto;
+    width: fit-content;
+    max-width: 600px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
 }
 
 .hidden {

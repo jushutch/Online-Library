@@ -7,6 +7,7 @@
         $user = new User();
         if ($user->isValidLogin($_POST['accountNumber'], $_POST['password'])) {
             $_SESSION['loggedIn'] = true;
+            $_SESSION['userId'] = $_POST['accountNumber'];
             $_SESSION['admin'] = $user->isAdmin($_POST['accountNumber']);
         }
         else {
@@ -27,7 +28,7 @@
         <link rel="stylesheet" href="CSS/formStyle.css">
     </head>
     <body>
-        <form method="post" action="login.php" id="createUserForm">
+        <form method="post" action="login.php">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>

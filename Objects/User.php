@@ -1,5 +1,5 @@
 <?php
-require_once "database/UserDbGateway.php";
+require_once __DIR__ . "/../database/UserDbGateway.php";
 
 class User {
 
