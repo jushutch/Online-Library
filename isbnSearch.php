@@ -1,19 +1,24 @@
 <?php
     session_start();
-    require_once "Objects/Book.php";
+    require_once __DIR__ . "/Objects/Book.php";
 
     if (!$_SESSION['admin'] || !$_SESSION['loggedIn']) {
         header("Location:login.php");
     }
 
+    if (isset($_POST['addBook'])) {
+        $book = new Book();
+        $book->createNewBook();
+    }
+
 ?>
-<html ng-app="bookSearch">
+<html ng-app="ISBNSearch">
     <head>
         <title>Add Book</title>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
-        <script src="isbnSearchComponent.js"></script>
+        <script src="angularJS/isbnSearchController.js"></script>
         <link rel="stylesheet" href="CSS/formStyle.css">
         <link rel="stylesheet" href="CSS/sharedStyles.css">
     </head>
@@ -22,7 +27,7 @@
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>
-                    <input type="search" ng-model="isbn" name="isbn" placeholder="ISBN *" size="20" minlength="13" maxlength="13" autofocus required>
+                    <input type="search" ng-model="isbn" name="isbn" placeholder="ISBN *" size="20" minlength="10" maxlength="13"autofocus required>
                     <input type="submit" name="isbnSearch" value="Search">
                 </li>
                 <a href="index.php">Home</a>
@@ -64,7 +69,10 @@
                     <input type="text" ng-value="pageCount" name="pageCount" size="2">
                 </div>
                 <div style="display:none">
-                    <input type="hidden" ng-value="isbn" name="isbn" size="13" required>
+                    <input type="hidden" ng-value="isbn" name="isbn">
+                </div>
+                <div style="display:none">
+                    <input type="hidden" ng-value="imageURL" name="imageURL">
                 </div>
                 <div>
                     <label for="genre">Genre</label>
