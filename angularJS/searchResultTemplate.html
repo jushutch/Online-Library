@@ -12,6 +12,7 @@
             <p>Pages: {{$ctrl.book.pageCount}}</p>
             <p>Publisher: {{$ctrl.book.publisher}}</p>
             <p>Year: {{$ctrl.book.year}}</p>
+            <p>ISBN: {{$ctrl.book.isbn}}</p>
         </div>
         <span style="float:right;">
             <button ng-disabled="checkoutDisabled" ng-click="checkOut()" ng-if="$ctrl.book.isAvailable">{{buttonText}}</button>

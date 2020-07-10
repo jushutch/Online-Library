@@ -18,7 +18,7 @@
             } else {
                 $http.post("/API/CheckoutAPI.php",
                     {isbn : vm.book.isbn,
-                        userId : userId})
+                    userId : userId})
                     .then(function(response){
                         $scope.buttonText = "Success!";
                         $scope.checkoutDisabled = true;
@@ -33,7 +33,12 @@
         $scope.carrySearchTerms = "";
 
         $scope.search = function(searchText) {
-            $http.post("/API/BookApi.php", {searchText: searchText}).then(function(book){
+            $http({
+                url: "/API/BookApi.php",
+                method: "GET",
+                params: {searchText : searchText}
+            })
+            .then(function(book){
                 $scope.searchResults = book["data"];
                 $scope.carrySearchTerms = searchText;
                 $scope.hasSearchResults = true;
