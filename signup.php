@@ -30,7 +30,7 @@
         <link rel="stylesheet" href="CSS/formStyle.css">
     </head>
     <body>
-        <form method="post" action="signup.php" id="createUserForm">
+        <form class="border" method="post" action="signup.php" id="createUserForm">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>

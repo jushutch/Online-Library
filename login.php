@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="CSS/formStyle.css">
     </head>
     <body>
-        <form method="post" action="login.php">
+        <form class="border" method="post" action="login.php">
             <a href="index.php"><img class="logo" src="images/logo.png" alt="Library of Time"></a>
             <ul class="formList">
                 <li>

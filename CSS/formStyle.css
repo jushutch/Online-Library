@@ -2,18 +2,18 @@ body {
     background-color: #92dbe0;
 }
 
-form {
-    box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);
-    border-radius: 10px;
-    border: 6px solid #305A72;
-    margin: auto;
-    width: fit-content;
-    max-width: 600px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    text-align: center;
-}
+/*form {*/
+/*    box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.35);*/
+/*    border-radius: 10px;*/
+/*    border: 6px solid #305A72;*/
+/*    margin: auto;*/
+/*    width: fit-content;*/
+/*    max-width: 600px;*/
+/*    position: relative;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+/*    text-align: center;*/
+/*}*/
 
 input, select{
     box-sizing: border-box; 
