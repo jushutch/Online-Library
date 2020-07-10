@@ -1,0 +1,32 @@
+.accountTab {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #305A72;
+    border-radius: 10px 10px 0px 0px;
+    border: none;
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+    padding: 8px 18px;
+    text-decoration: none;
+    font: 12px Arial, Helvetica, sans-serif;
+    position:relative;
+    z-index:2;
+    outline:none;
+}
+
+.accountDetails {
+    position: relative;
+    top: 50px;
+    width: 60%;
+    margin: auto;
+}
+
+.accountDetails label {
+    float:left;
+}
+
+.accountDetails span {
+    float: right;
+}

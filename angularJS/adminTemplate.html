@@ -1,0 +1,78 @@
+<div>
+<form autocomplete="off" ng-submit="search(isbn)" ng-if="!hasSearchResult">
+    <ul class="formList">
+        <li>
+            <input type="search" ng-model="isbn" name="isbn" placeholder="ISBN *" size="20" minlength="10" maxlength="13" required>
+            <input type="submit" name="isbnSearch" value="Search">
+        </li>
+    </ul>
+</form>
+<form autocomplete="off" ng-if="hasSearchResult">
+    <div class="formList">
+        <div style="width:45%;">
+            <label for="title">Title</label>
+            <input type="text" ng-model="searchResult.title"  name="title" style="width:100%;" autofocus required>
+        </div>
+        <div style="width:45%;">
+            <label for="subtitle">Subtitle</label>
+            <input type="text" ng-model="searchResult.subtitle"  name="subtitle" style="width:100%;">
+        </div>
+        <div>
+            <label for="series">Series</label>
+            <input type="text" ng-model="searchResult.series" name="series" size="20">
+        </div>
+        <div>
+            <label for="seriesNumber">No.</label>
+            <input type="number" ng-model="searchResult.seriesNumber" name="seriesNumber" size="2">
+        </div>
+        <div style="width:45%">
+            <label for="authors">Authors</label>
+            <input type="text" ng-model="searchResult.authors" name="authors" style="width:100%" required>
+        </div>
+        <div style="width:45%">
+            <label for="publisher">Publisher</label>
+            <input type="text" ng-model="searchResult.publisher" name="publisher" style="width:100%" required>
+        </div>
+        <div>
+            <label for="year">Year</label>
+            <input type="text" ng-model="searchResult.year" name="year" maxlength="4" size="3" required>
+        </div>
+        <div>
+            <label for="pageCount">Pages</label>
+            <input type="text" ng-model="searchResult.pageCount" name="pageCount" size="2">
+        </div>
+<!--        <div style="display:none">-->
+<!--            <input type="hidden" ng-value="searchResult.isbn" name="isbn">-->
+<!--        </div>-->
+<!--        <div style="display:none">-->
+<!--            <input type="hidden" ng-value="searchResult.imageURL" name="imageURL">-->
+<!--        </div>-->
+        <div>
+            <label for="genre">Genre</label>
+            <select name="genre" ng-model="searchResult.genre" required>
+                <option value="" disabled selected hidden></option>
+                <option value="Art">Art</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Nonfiction">Nonfiction</option>
+                <option value="Philosophy">Philosophy</option>
+                <option value="Reference">Reference</option>
+                <option value="Sci-fi">Sci-fi</option>
+                <option value="Young Adult">Young Adult</option>
+            </select>
+        </div>
+        <div style="display:block;">
+            <label for="description">Description</label>
+            <textarea ng-model="searchResult.description" rows="6" style="width:100%" name="description" placeholder="Description"></textarea>
+        </div>
+        <div>
+            <button ng-click="addBook(searchResult)" ng-if="!bookIsInLibrary">Add Book</button>
+            <span ng-if="bookIsInLibrary">
+                <button ng-click="updateBook()">Update</button>
+                <button ng-click="deleteBook()">Delete</button>
+                <button ng-click="checkInBook()">Check In</button>
+            </span>
+        </div>
+    </div>
+</form>
+</div>
