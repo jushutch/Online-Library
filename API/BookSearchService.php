@@ -20,9 +20,7 @@ class BookSearchService
     private function searchResultsToBooks($searchResults) {
         $bookList = [];
         foreach($searchResults as $result) {
-            $book = new Book();
-            $book->fromArray($result);
-            $bookList[] = $book;
+            $bookList[] = Book::fromArray($result);
         }
         return $bookList;
     }

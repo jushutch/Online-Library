@@ -11,7 +11,7 @@ class BookSearchDbGateway extends Gateway
                             GROUP BY book_id) as authors";
         $sql = "SELECT DISTINCT author_list, book.book_id, title, subtitle, publisher, year, page_count, isbn, series, series_number, description, image_url, genre,
                 CASE 
-                    WHEN book.book_id = checkout.book_id THEN 0
+                    WHEN book.book_id = checkout.book_id AND checkout.return_date IS NULL THEN 0
                     ELSE 1
                 END AS is_available
                 FROM $selectAuthors
@@ -27,16 +27,17 @@ class BookSearchDbGateway extends Gateway
                 OR (series LIKE ?)
                 OR (subtitle LIKE ?)
                 OR (publisher LIKE ?)
-                OR (genre LIKE ?)";
+                OR (genre LIKE ?)
+                OR (isbn LIKE ?)";
         $query = "%".$searchText."%";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssssss", $query, $query, $query, $query, $query, $query, $query);
+        $stmt->bind_param("ssssssss", $query, $query, $query, $query, $query, $query, $query, $query);
         $stmt->execute();
         $searchResults = [];
         $result = $stmt->get_result();
         $stmt->close();
         while ($row = $result->fetch_assoc()) {
-            $row["authors"] = explode(",", $row["author_list"]);
+            $row["authors"] = $row["author_list"];
             $searchResults[] = $row;
         }
         return $searchResults;

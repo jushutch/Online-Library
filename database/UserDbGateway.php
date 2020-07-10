@@ -26,11 +26,11 @@ class UserDbGateway extends Gateway {
     }
 
     public function getAccountInfo($accountNumber) {
-        $sql = "SELECT account_number, password FROM user WHERE account_number = ?";
+        $sql = "SELECT account_number, first_name, last_name, email, password, created FROM user WHERE account_number = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $accountNumber);
         $stmt->execute();
-        $row = $stmt->fetch();
+        $row = $stmt->get_result()->fetch_assoc();
         $stmt->close();
         return $row;
     }
