@@ -1,6 +1,7 @@
 <?php
 
 include_once __DIR__ . " /../database/BookDbGateway.php";
+include_once __DIR__ . "/../objects/Book.php";
 
 class ManageBookService
 {
@@ -9,6 +10,14 @@ class ManageBookService
     public function __construct()
     {
         $this->bookDbGateway = new BookDbGateway();
+    }
+
+    public function addBook($book) {
+        if (!$book) {
+            return;
+        }
+        $book = Book::fromArray($book);
+        $this->bookDbGateway->insertBook($book);
     }
 
     public function updateBook($book) {
@@ -31,6 +40,17 @@ class ManageBookService
             return;
         }
         $this->bookDbGateway->checkInBook($book['bookId']);
+    }
+
+    public function updateHolds($book) {
+        if (!isset($book['bookId']) || !$book['bookId']) {
+            return;
+        }
+        $firstOnHoldAccountId = $this->bookDbGateway->getFirstOnHoldAccountId($book['bookId']);
+        if ($firstOnHoldAccountId) {
+            $this->bookDbGateway->fulfillHold($book['bookId'], $firstOnHoldAccountId);
+            $this->bookDbGateway->checkoutBook($book['bookId'], $firstOnHoldAccountId);
+        }
     }
 
 }

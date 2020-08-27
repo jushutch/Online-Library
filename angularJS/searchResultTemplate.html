@@ -15,8 +15,7 @@
             <p>ISBN: {{$ctrl.book.isbn}}</p>
         </div>
         <span style="float:right;">
-            <button ng-disabled="checkoutDisabled" ng-click="checkOut()" ng-if="$ctrl.book.isAvailable">{{buttonText}}</button>
-            <button ng-if="!$ctrl.book.isAvailable">Put on Hold</button>
+            <button ng-disabled="buttonDisabled" ng-click="changeBookAvailable()" >{{buttonText}}</button>
         </span>
     </div>
 </div>

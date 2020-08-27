@@ -32,7 +32,12 @@ class AccountService
     }
 
     private function getBooksOnHold($accountNumber) {
-        return null;
+        $books = $this->bookDbGateway->getBooksOnHoldForAccount($accountNumber);
+        $booksOnHold = [];
+        foreach($books as $book) {
+            $booksOnHold[] = Book::fromArray($book);
+        }
+        return $booksOnHold;
     }
 
     private function getUserDetails($accountNumber) {

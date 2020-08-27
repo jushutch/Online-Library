@@ -27,7 +27,7 @@ class BookDbGateway extends Gateway {
         if ($book->description) $this->insertDescription($book->description, $bookId);
     }
 
-    public function insertAuthors($authors, $bookId) {
+    public function insertAuthors(array $authors, int $bookId) {
         $sql = "INSERT INTO author(book_id, author_name) 
                     VALUES ( ? , ? )";
         $stmt = $this->conn->prepare($sql);
@@ -38,7 +38,7 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    public function deleteAuthors($bookId) {
+    public function deleteAuthors(int $bookId) {
         $sql = "DELETE FROM author
                 WHERE author.book_id = ?";
         $stmt = $this->conn->prepare($sql);
@@ -47,7 +47,7 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    public function insertDescription($description, $bookId) {
+    public function insertDescription(string $description, int $bookId) {
         $sql = "INSERT INTO book_description(book_id, description) 
                     VALUES ( ? , ? )";
         $stmt = $this->conn->prepare($sql);
@@ -56,7 +56,7 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    public function insertImageURL($imageURL, $bookId) {
+    public function insertImageURL(string $imageURL, int $bookId) {
         $sql = "INSERT INTO book_image(book_id, image_url) 
                     VALUES ( ? , ? )";
         $stmt = $this->conn->prepare($sql);
@@ -65,29 +65,97 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    public function checkoutBook($isbn, $userId) {
-        $sql = "INSERT INTO checkout(book_id, account_number, due_date) 
-                VALUES ( ? , ? , DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH))";
-        $bookId = (int) $this->getBookIdByISBN($isbn);
-        if (!$bookId) {
-            return;
-        }
+    public function putBookOnHold(int $bookId, int $userId) {
+        $sql = "INSERT INTO hold(book_id, account_number) 
+                VALUES ( ? , ? )";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $bookId, $userId);
         $stmt->execute();
         $stmt->close();
     }
 
-    public function checkInBook($bookId) {
-        $sql = "UPDATE checkout SET return_date = CURRENT_TIMESTAMP() WHERE checkout.book_id = ?";
+    public function isBookOnHoldByAccountNumber(int $bookId, int $userId) {
+        $sql = "SELECT hold_id 
+                FROM hold 
+                WHERE book_id = ? AND account_number = ? AND fulfilled IS NULL";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $bookId, $userId);
+        $stmt->execute();
+        $stmt->store_result();
+        $rowCount = $stmt->num_rows;
+        $stmt->close();
+        return $rowCount > 0;
+    }
+
+    public function getFirstOnHoldAccountId(int $bookId) {
+        $sql = "SELECT account_number 
+                FROM hold 
+                WHERE book_id = ? AND fulfilled IS NULL 
+                ORDER BY timestamp ASC
+                LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row["account_number"];
+    }
+
+    public function fulfillHold(int $bookId, int $accountId) {
+        $sql = "UPDATE hold 
+                SET fulfilled = CURRENT_TIMESTAMP() 
+                WHERE book_id = ? AND account_number = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $bookId, $accountId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function getBooksOnHoldForAccount(int $accountNumber) {
+        $selectAuthors = "(SELECT GROUP_CONCAT(author_name) as author_list, book_id 
+                            FROM author
+                            GROUP BY book_id) as authors";
+        $sql = "SELECT author_list, book.book_id, title, subtitle, publisher, year, page_count, isbn, series, series_number, description, image_url, genre
+                FROM $selectAuthors
+                LEFT JOIN book on book.book_id = authors.book_id
+                left JOIN book_description on book_description.book_id = book.book_id
+                left JOIN book_image on book_image.book_id = book.book_id
+                left join author on author.book_id = book.book_id
+                INNER JOIN genre on genre.genre_id = book.genre_id
+                LEFT JOIN hold on hold.book_id = book.book_id
+                WHERE hold.hold_id IS NOT NULL AND hold.account_number = ? AND hold.fulfilled IS NULL";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $accountNumber);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $bookData = [];
+        while($book = $result->fetch_assoc()) {
+            $bookData[] = $book;
+        }
+        $stmt->close();
+        return $bookData;
+    }
+
+    public function checkoutBook(int $bookId, int $userId) {
+        $sql = "INSERT INTO checkout(book_id, account_number, due_date) 
+                VALUES ( ? , ? , DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH))";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $bookId, $userId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function checkInBook(int $bookId) {
+        $sql = "UPDATE checkout 
+                SET return_date = CURRENT_TIMESTAMP() 
+                WHERE checkout.book_id = ? AND return_date IS NULL";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $bookId);
         $stmt->execute();
         $stmt->close();
-        echo "end of checkInBook reached";
     }
 
-    public function isBookIdCheckedOut($bookId) {
+    public function isBookIdCheckedOut(int $bookId) {
         $sql = "SELECT checkout_id FROM checkout WHERE book_id = ? AND return_date IS NULL";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $bookId);
@@ -98,7 +166,7 @@ class BookDbGateway extends Gateway {
         return $rowCount > 0;
     }
 
-    public function getCheckedOutBooksForAccount($accountNumber) {
+    public function getCheckedOutBooksForAccount(int $accountNumber) {
         $selectAuthors = "(SELECT GROUP_CONCAT(author_name) as author_list, book_id 
                             FROM author
                             GROUP BY book_id) as authors";
@@ -123,7 +191,7 @@ class BookDbGateway extends Gateway {
         return $bookData;
     }
 
-    public function getBookIdByISBN($isbn) {
+    public function getBookIdByISBN(int $isbn) {
         $sql = "SELECT book_id
                 FROM book
                 WHERE isbn = ?";
@@ -135,7 +203,7 @@ class BookDbGateway extends Gateway {
         return $row['book_id'] ?? null;
     }
 
-    public function getBookByBookId($bookId) {
+    public function getBookByBookId(int $bookId) {
         $selectAuthors = "(SELECT GROUP_CONCAT(author_name) as author_list, book_id 
                             FROM author
                             GROUP BY book_id) as authors";
@@ -178,13 +246,12 @@ class BookDbGateway extends Gateway {
             $book['bookId']
         );
         $stmt->execute();
-        var_dump($book);
         $stmt->close();
         $this->deleteAuthors($book['bookId']);
         $this->insertAuthors($book['authors'], $book['bookId']);
     }
 
-    public function deleteBookByISBN($isbn) {
+    public function deleteBookByISBN(int $isbn) {
         $sql = "DELETE FROM book
                 WHERE isbn = ?";
         $stmt = $this->conn->prepare($sql);
@@ -193,7 +260,7 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    public function deleteBookByBookId($bookId) {
+    public function deleteBookByBookId(int $bookId) {
         $sql = "DELETE FROM book
                 WHERE book_id = ?";
         $stmt = $this->conn->prepare($sql);
@@ -202,7 +269,7 @@ class BookDbGateway extends Gateway {
         $stmt->close();
     }
 
-    private function getGenreId($genre) {
+    private function getGenreId(int $genre) {
         $sql = "SELECT genre_id FROM genre WHERE genre = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $genre);
